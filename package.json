@@ -10,8 +10,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "date-time-format-timezone": "^1.0.22",
+    "intl": "^1.2.5",
     "react": "17.0.2",
     "react-native": "0.67.2",
+    "react-native-modals": "^0.22.3",
+    "react-native-paper": "^4.11.2",
     "react-native-popup-dialog": "^0.18.3",
     "react-native-swipeout": "^2.3.6",
     "realm": "^10.12.0"

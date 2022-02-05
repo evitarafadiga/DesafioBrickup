@@ -1,14 +1,27 @@
 import React, { Component } from 'react'
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import { 
+    View, 
+    FlatList, 
+    Text, 
+    TouchableOpacity, 
+    StyleSheet, 
+    Alert,
+    Button } from 'react-native'
 
 const HeaderComponent = props => {
     const { title, showAddTodoList, hasAddButton,
     hasSortButton, sort, sortState, hasDeleteAllButton
     } = props 
     return(
-        <View style={StyleSheet.container}>
+        <View style={styles.container}>
             {hasAddButton && <TouchableOpacity style={styles.addButton} onPress={showAddTodoList}>
-                <Image style={styles.addButtonImage} source={require('../images/add-icon.png')} />
+                
+                <Button 
+                style={styles.addButton}
+                title="Nova Tarefa"
+                onPress={showAddTodoList}
+                color="green" />
+
                 </TouchableOpacity>}
 
         </View>
@@ -19,7 +32,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        backgroundColor: 'yellow',
+        backgroundColor: 'rgb(45,56,78)',
         height: Platform.OS === 'ios' ? 100 : 80,
     },
     titleText: {
@@ -40,6 +53,9 @@ const styles = StyleSheet.create({
         zIndex: 2,
         marginRight: 10,
         marginTop: 30,
+        borderRadius: 17,
+        width: 140,
+        height: 70
     },
     addButtonImage: {
         width: 42,
