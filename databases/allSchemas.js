@@ -18,6 +18,8 @@ export const TodoListSchema = {
     properties: {
         id: 'int',
         name: 'string',
+        descricao: 'string',
+        datahora: 'string',
         creationDate: 'date',
         todos: { type: 'list', objectType: TODO_SCHEMA },
     }
@@ -43,6 +45,7 @@ export const updateTodoList = todoList => new Promise((resolve, reject) => {
         realm.write(() => {
             let updatingTodoList = realm.objectForPrimaryKey(TODOLIST_SCHEMA, todoList.id)
             updatingTodoList.name = todoList.name
+            updatingTodoList.descricao = todoList.descricao
             resolve()
         })
     }).catch((error) => reject(error));;

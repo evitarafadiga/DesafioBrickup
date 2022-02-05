@@ -9,21 +9,15 @@ import {
     Button } from 'react-native'
 
 const HeaderComponent = props => {
-    const { title, showAddTodoList, hasAddButton,
+    const { title, showAddTodoList, deleteAll, hasAddButton,
     hasSortButton, sort, sortState, hasDeleteAllButton
     } = props 
     return(
         <View style={styles.container}>
+            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20, justifyContent: 'center' }}>Lista de Tarefas</Text>
             {hasAddButton && <TouchableOpacity style={styles.addButton} onPress={showAddTodoList}>
                 
-                <Button 
-                style={styles.addButton}
-                title="Nova Tarefa"
-                onPress={showAddTodoList}
-                color="green" />
-
                 </TouchableOpacity>}
-
         </View>
     )
 }
@@ -32,7 +26,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        backgroundColor: 'rgb(45,56,78)',
+        backgroundColor: 'rgb(242,159,5)',
         height: Platform.OS === 'ios' ? 100 : 80,
     },
     titleText: {
@@ -55,12 +49,18 @@ const styles = StyleSheet.create({
         marginTop: 30,
         borderRadius: 17,
         width: 140,
-        height: 70
+        height: 70,
+        
     },
     addButtonImage: {
         width: 42,
         height: 42,
         tintColor: 'white'
     },
+    footer: {
+        position: 'fixed',
+        bottom: 0,
+    }
 })
-export default HeaderComponent
+
+export default HeaderComponent;
