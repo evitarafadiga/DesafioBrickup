@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, Alert, Modal, ModalPortal, Image } from 'react-native';
-import realm, { insertNewTodoList, updateTodoList, deleteTodoList, queryAllTodoLists } from '../databases/allSchemas';
+import { SafeAreaView, View, FlatList, Text, TouchableOpacity, StyleSheet, Alert, Modal, ModalPortal, Image } from 'react-native';
+import { 
+    insertNewTodoList,
+    updateTodoList, 
+    deleteTodoList, 
+    queryAllTodoLists } from '../databases/allSchemas';
+import realm from '../databases/allSchemas'
 import { Platform } from 'react-native'
-
+import Swipeout from 'react-native-swipeout';
 import HeaderComponent from './HeaderComponent';
 import PopupDialogComponent from './PopupDialogComponent';
 
 let FlatListItem = props => {
+    const { itemIndex, id, name, creationDate, descricao, datahora, popupDialogComponent, onPressItem } = props;
+
     if (Platform.OS === 'android') {
         require('intl');
         require('intl/locale-data/jsonp/en-US');
@@ -15,8 +22,6 @@ let FlatListItem = props => {
         Intl.__disableRegExpRestore();/*For syntaxerror invalid regular expression unmatched parentheses*/
     }
 
-    const { itemIndex, id, name, creationDate, descricao, datahora, popupDialogComponent, onPressItem } = props;
-    
     showEditModal = () => {
         popupDialogComponent.showDialogComponentForUpdate({
             id, name, descricao, datahora
@@ -24,17 +29,17 @@ let FlatListItem = props => {
     }
 
     showDeleteConfirmation = () => {
+        console.log(id)
         Alert.alert(
             'Excluir',
-            'Excluir um item da lista',
+            'Confirme a exclusão do item da lista',
             [
                 {
-                    text: 'Cancelar', onPress: () => { },//Do nothing
+                    text: 'Cancelar', onPress: () => { },
                     style: 'cancel'
                 },
                 {
-                    text: 'Excluir', onPress: () => {
-                        console.log(this.id);
+                    text: 'Excluir', onPress: () => {                        
                         deleteTodoList(id).then().catch(error => {
                             alert(`Erro de remoção = ${id}, error=${error}`);
                         });
@@ -46,49 +51,50 @@ let FlatListItem = props => {
     };
 
     return (    
+        
         <TouchableOpacity onPress={onPressItem} >
             <View style={{ backgroundColor: itemIndex % 2 == 0 ? 'whitesmoke' : 'white' }}>
-                <Text style={{ paddingTop: 20, paddingLeft: 20, color: 'black' , fontWeight: 'bold', fontSize: 18, margin: 10, justifyContent: 'center' }}>{name}</Text>
-                <Text style={{ paddingLeft: 50, color: 'gray' , fontWeight: 'bold', fontSize: 15, margin: 15, justifyContent: 'center' }}>{descricao}</Text>
-                <Text style={{ fontSize: 18, margin: 10 }} numberOfLines={0}>{datahora}</Text>
+                <Text style={{ paddingLeft: 20, color: 'black' , fontWeight: 'bold', fontSize: 18, margin: 20, justifyContent: 'center' }}>{name}</Text>
+                <Text style={{ paddingLeft: 50, color: 'gray' , fontWeight: 'bold', fontSize: 15, justifyContent: 'center' }}>{descricao}</Text>
+                <Text style={{ fontSize: 12, paddingLeft: 310 }}>{datahora.slice(6,8)}/{datahora.slice(4,6)}/{datahora.slice(0,-4)}</Text>
 
                 <View style={styles.container, {flexDirection: 'row'}}>
                     
                     <TouchableOpacity
-                    style={ styles.button, { bottom: 140,left: 360}}
+                    style={ styles.button, { bottom: 100, left: 360}}
                     onPress={() => {
                         showDeleteConfirmation()
                     }}>
-                        <Image 
+                        <Image
+                        onPress={showDeleteConfirmation}
                         style={styles.buttonImageIconStyle}
                         source={require('../images/delete-icon.png')} />
                     </TouchableOpacity>
                     <TouchableOpacity
-                    style={{ bottom: 140,left: 270}}
+                    style={{ bottom: 100,left: 270}}
                     onPress={() => {
-                        showMore()
+                        
                     }}>
                         <Image 
                         style={styles.buttonImageIconStyle}
                         source={require('../images/edit-icon.png')} />
                     </TouchableOpacity>
                     <TouchableOpacity
-                    style={{ bottom: 140,left: 180}}
+                    style={{ bottom: 100,left: 180}}
                     onPress={() => {
                         showEditModal()
                     }}>
                         <Image 
                         style={styles.buttonImageIconStyle}
-                        source={require('../images/add-icon.png')} />
+                        source={require('../images/sort-desc-icon.png')} />
                     </TouchableOpacity>
                         
                 </View>
             </View>
         </TouchableOpacity>
-        
     );
 }
-export default class TodoListComponent extends Component {
+export default class TodoListComponent extends React.Component {
     
     constructor(props) {
         super(props);
@@ -96,9 +102,9 @@ export default class TodoListComponent extends Component {
             todoLists: []
         };
         this.reloadData();
-        /*realm.addListener('change', () => {
+        realm.addListener('change', () => {
             this.reloadData();
-        });*/
+        });
     }
     reloadData = () => {
         queryAllTodoLists().then((todoLists) => {
@@ -109,30 +115,35 @@ export default class TodoListComponent extends Component {
         console.log(`props recarregadas!`);
     }
     render() {
-        return (<View style={styles.container}>
-            <HeaderComponent title={"Lista de Tarefas"}
-                hasAddButton={true}
-                hasDeleteAllButton={true}
-                showAddTodoList={
-                    () => {
-                        
+        return (
+        
+            <View style={styles.container}>
+                <HeaderComponent title={"Lista de Tarefas"}
+                    hasAddButton={true}
+                    hasDeleteAllButton={true}
+                    showAddTodoList={
+                        () => {
+
+                        }
                     }
-                }
-            />
-            <FlatList
-                style={styles.flatList}
-                data={this.state.todoLists}
-                renderItem={({ item, index }) => <FlatListItem {...item} itemIndex={index}
-                    name={item.name}
-                    descricao={item.descricao}
-                    onPressItem={() => {
-                        openModal()
-                    }} >
-                    </FlatListItem>}
-                keyExtractor={item => item.id}
-            />
-            <PopupDialogComponent ref={"popupDialogComponent"} />
-        </View>);
+                />
+                <FlatList
+                    style={styles.flatList}
+                    data={this.state.todoLists}
+                    renderItem={({ item, index }) => <FlatListItem {...item} itemIndex={index}
+                        id={item.id}
+                        name={item.name}                        
+                        descricao={item.descricao}
+                        datahora={item.datahora}
+                        onPressItem={() => {
+                            alert(`Detalhes de ${item.name}`);
+                        }} >
+                        </FlatListItem>}
+                    keyExtractor={item => item.id}
+                />
+                <PopupDialogComponent ref={"popupDialogComponent"} />
+            </View>
+        );
     }
 }
 const styles = StyleSheet.create({

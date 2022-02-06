@@ -18,6 +18,7 @@ export default class PopupDialogComponent extends Component {
         this.state = {
             id: 0,
             name: '',
+            descricao: '',
             isAddNew: true
         };
     }
@@ -46,13 +47,13 @@ export default class PopupDialogComponent extends Component {
         return (
                 <View style={styles.container}>
                     <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                    <Text>Título*</Text>
+                    <Text style={styles.simpleText}>Título*</Text>
                     <TextInput style={styles.textInput} placeholder="Insira um título" autoCorrect={false}
-                        width={200} onChangeText={(text) => this.setState({ name: text })} value={this.state.name}
+                        width={300} onChangeText={(text) => this.setState({ name: text })} value={this.state.name}
                     />
-                    <Text>Descrição*</Text>
+                    <Text style={styles.simpleText}>Descrição*</Text>
                     <TextInput style={styles.textInput} placeholder="Insira uma descrição" autoCorrect={false}
-                        width={200} height={100} onChangeText={(text2) => this.setState({ descricao: text2 })} value={this.state.descricao}
+                        width={300} height={100} onChangeText={(text2) => this.setState({ descricao: text2 })} value={this.state.descricao}
                     />
                     
                     
@@ -66,11 +67,13 @@ export default class PopupDialogComponent extends Component {
                                 alert("Insira um nome para a tarefa!!!");
                                 return;
                             } else {
+                                let rightNow = new Date();
+                                const res = rightNow.toISOString().slice(0,10).replace(/-/g,"");
                                 const newTodoList = {
                                     id: Math.floor(Date.now() / 1000),
                                     name: this.state.name,
                                     creationDate: new Date(),
-                                    datahora: String(Date.now()),
+                                    datahora: res,
                                     descricao: this.state.descricao,
                                 };
                                 insertNewTodoList(newTodoList).then().catch((error) => {
@@ -129,6 +132,9 @@ const styles = StyleSheet.create({
     textLabel: {
         color: 'white',
         fontSize: 18,
+    },
+    simpleText: {
+        fontSize: 16,
     }
 });
 

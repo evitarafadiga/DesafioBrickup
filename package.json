@@ -10,6 +10,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-navigation/native": "^6.0.8",
+    "@react-navigation/native-stack": "^6.4.1",
     "date-time-format-timezone": "^1.0.22",
     "intl": "^1.2.5",
     "react": "17.0.2",
@@ -19,6 +21,8 @@
     "react-native-modals": "^0.22.3",
     "react-native-paper": "^4.11.2",
     "react-native-popup-dialog": "^0.18.3",
+    "react-native-safe-area-context": "^3.3.2",
+    "react-native-screens": "^3.10.2",
     "react-native-swipeout": "^2.3.6",
     "react-native-tab-view": "^3.1.1",
     "realm": "^10.12.0"

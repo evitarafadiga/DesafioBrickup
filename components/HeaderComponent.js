@@ -14,7 +14,7 @@ const HeaderComponent = props => {
     } = props 
     return(
         <View style={styles.container}>
-            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20, justifyContent: 'center' }}>Lista de Tarefas</Text>
+            <Text style={styles.titleText}>Lista de Tarefas</Text>
             {hasAddButton && <TouchableOpacity style={styles.addButton} onPress={showAddTodoList}>
                 
                 </TouchableOpacity>}
@@ -27,21 +27,16 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         backgroundColor: 'rgb(242,159,5)',
-        height: Platform.OS === 'ios' ? 100 : 80,
+        height: Platform.OS === 'ios' ? 100 : 60,
     },
     titleText: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 10,
-        position: 'absolute',
+        fontSize: 14,
+        position: 'relative',
         textAlign: 'center',
         justifyContent: 'center',
         alignItems: 'center',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        padding: 50
     },
     addButton: {
         zIndex: 2,
