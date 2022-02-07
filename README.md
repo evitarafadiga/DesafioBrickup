@@ -1,5 +1,4 @@
-# Lista de Tarefas (Todo)
+# Lista de Tarefas em React Native
 >React Native App + Realm local storage para armazenar lista de tarefas.
 
-Tela principal:
-![Screenshot 1](./public/Screenshot_20220205-200700.png)
+![Banner vers1](./public/banner.png)
