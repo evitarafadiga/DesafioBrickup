@@ -6,6 +6,7 @@ import {
     TouchableOpacity, 
     StyleSheet, 
     Alert,
+    Image,
     Button } from 'react-native'
 
 const HeaderComponent = props => {
@@ -15,8 +16,10 @@ const HeaderComponent = props => {
     return(
         <View style={styles.container}>
             <Text style={styles.titleText}>Lista de Tarefas</Text>
-            {hasAddButton && <TouchableOpacity style={styles.addButton} onPress={showAddTodoList}>
-                
+            {hasAddButton && <TouchableOpacity style={styles.addButton} onPress={showAddTodoList}> 
+                        <Image
+                        style={styles.buttonImageIconStyle}
+                        source={require('../images/add-icon.png')} />
                 </TouchableOpacity>}
         </View>
     )
@@ -24,28 +27,21 @@ const HeaderComponent = props => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgb(242,159,5)',
-        height: Platform.OS === 'ios' ? 100 : 60,
+        height: Platform.OS === 'ios' ? 100 : 80,
     },
     titleText: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 14,
-        position: 'relative',
-        textAlign: 'center',
-        justifyContent: 'center',
-        alignItems: 'center',
+        paddingEnd: 180,
     },
     addButton: {
+        flex: 0,
         zIndex: 2,
-        marginRight: 10,
-        marginTop: 30,
-        borderRadius: 17,
-        width: 140,
-        height: 70,
-        
+        borderRadius: 17,        
     },
     addButtonImage: {
         width: 42,
@@ -55,7 +51,23 @@ const styles = StyleSheet.create({
     footer: {
         position: 'fixed',
         bottom: 0,
-    }
+    },
+    buttonIconSeparatorStyle: {
+        zIndex: 2,
+        marginRight: 10,
+        marginTop: 30,
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        width: 1,
+        height: 50
+    },
+    buttonImageIconStyle: {
+        padding: 10,
+        margin: 5,
+        height: 60,
+        width: 60,
+        resizeMode: 'stretch',
+    },
 })
 
 export default HeaderComponent;

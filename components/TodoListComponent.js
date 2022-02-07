@@ -10,6 +10,8 @@ import { Platform } from 'react-native'
 import Swipeout from 'react-native-swipeout';
 import HeaderComponent from './HeaderComponent';
 import PopupDialogComponent from './PopupDialogComponent';
+import { Button } from 'react-native-paper';
+import { ScrollView } from 'react-native-gesture-handler';
 
 let FlatListItem = props => {
     const { itemIndex, id, name, creationDate, descricao, datahora, popupDialogComponent, onPressItem } = props;
@@ -29,7 +31,7 @@ let FlatListItem = props => {
     }
 
     showDeleteConfirmation = () => {
-        console.log(id)
+        console.log(`excluindo item: ` + id)
         Alert.alert(
             'Excluir',
             'Confirme a exclusão do item da lista',
@@ -64,31 +66,22 @@ let FlatListItem = props => {
                     style={ styles.button, { bottom: 100, left: 360}}
                     onPress={() => {
                         showDeleteConfirmation()
+                        console.log("Remoçao chamada")
                     }}>
                         <Image
-                        onPress={showDeleteConfirmation}
                         style={styles.buttonImageIconStyle}
                         source={require('../images/delete-icon.png')} />
                     </TouchableOpacity>
                     <TouchableOpacity
                     style={{ bottom: 100,left: 270}}
                     onPress={() => {
-                        
+                        showEditModal()
+                        console.log("Edição chamada")
                     }}>
                         <Image 
                         style={styles.buttonImageIconStyle}
                         source={require('../images/edit-icon.png')} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                    style={{ bottom: 100,left: 180}}
-                    onPress={() => {
-                        showEditModal()
-                    }}>
-                        <Image 
-                        style={styles.buttonImageIconStyle}
-                        source={require('../images/sort-desc-icon.png')} />
-                    </TouchableOpacity>
-                        
+                    </TouchableOpacity>                        
                 </View>
             </View>
         </TouchableOpacity>
@@ -116,17 +109,17 @@ export default class TodoListComponent extends React.Component {
     }
     render() {
         return (
-        
+            <View style={{flex: 1}}>
             <View style={styles.container}>
+                
                 <HeaderComponent title={"Lista de Tarefas"}
                     hasAddButton={true}
-                    hasDeleteAllButton={true}
                     showAddTodoList={
                         () => {
+                            console.log('chamando adição!')
+                            this.refs.popupDialogComponent.showDialogComponentForAdd()
+                        }}/>
 
-                        }
-                    }
-                />
                 <FlatList
                     style={styles.flatList}
                     data={this.state.todoLists}
@@ -142,6 +135,8 @@ export default class TodoListComponent extends React.Component {
                     keyExtractor={item => item.id}
                 />
                 <PopupDialogComponent ref={"popupDialogComponent"} />
+                
+            </View>
             </View>
         );
     }
@@ -165,6 +160,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22
+    },
+    centeredButton: {
+        justifyContent: 'center',
+        alignItems: "center",
+        marginBottom: 150,
+        backgroundColor: 'red',
+        height: 100,
+        width: 100,
     },
     button: {
         borderRadius: 20,
@@ -216,5 +219,5 @@ const styles = StyleSheet.create({
         height: 35,
         width: 35,
         resizeMode: 'stretch',
-      },
+    },
 });
