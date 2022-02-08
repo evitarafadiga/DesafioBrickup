@@ -14,7 +14,6 @@ import { Button } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 
 let FlatListItem = props => {
-    const { itemIndex, id, name, creationDate, descricao, datahora, popupDialogComponent, onPressItem } = props;
 
     if (Platform.OS === 'android') {
         require('intl');
@@ -24,12 +23,14 @@ let FlatListItem = props => {
         Intl.__disableRegExpRestore();/*For syntaxerror invalid regular expression unmatched parentheses*/
     }
 
+    const { itemIndex, id, name, creationDate, descricao, datahora, popupDialogComponent, onPressItem } = props;
+
     showEditModal = () => {
         popupDialogComponent.showDialogComponentForUpdate({
-            id, name, descricao, datahora
+            id, name, descricao, datahora, creationDate
         });
     }
-
+    
     showDeleteConfirmation = () => {
         console.log(`excluindo item: ` + id)
         Alert.alert(
@@ -72,16 +73,13 @@ let FlatListItem = props => {
                         style={styles.buttonImageIconStyle}
                         source={require('../images/delete-icon.png')} />
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                     style={{ bottom: 100,left: 270}}
-                    onPress={() => {
-                        showEditModal()
-                        console.log("Edição chamada")
-                    }}>
+                    onPress={showEditModal}>
                         <Image 
                         style={styles.buttonImageIconStyle}
                         source={require('../images/edit-icon.png')} />
-                    </TouchableOpacity>                        
+                    </TouchableOpacity>                         */}
                 </View>
             </View>
         </TouchableOpacity>
@@ -105,38 +103,41 @@ export default class TodoListComponent extends React.Component {
         }).catch((error) => {
             this.setState({ todoLists: [] });
         });
-        console.log(`props recarregadas!`);
+        console.log(`dados recarregados`);
     }
     render() {
         return (
+            
             <View style={{flex: 1}}>
-            <View style={styles.container}>
-                
-                <HeaderComponent title={"Lista de Tarefas"}
-                    hasAddButton={true}
-                    showAddTodoList={
-                        () => {
-                            console.log('chamando adição!')
-                            this.refs.popupDialogComponent.showDialogComponentForAdd()
-                        }}/>
-
-                <FlatList
-                    style={styles.flatList}
-                    data={this.state.todoLists}
-                    renderItem={({ item, index }) => <FlatListItem {...item} itemIndex={index}
-                        id={item.id}
-                        name={item.name}                        
-                        descricao={item.descricao}
-                        datahora={item.datahora}
-                        onPressItem={() => {
-                            alert(`Detalhes de ${item.name}`);
-                        }} >
-                        </FlatListItem>}
-                    keyExtractor={item => item.id}
-                />
-                <PopupDialogComponent ref={"popupDialogComponent"} />
-                
-            </View>
+                <View style={styles.container}>
+                    
+                    <HeaderComponent title={"Lista de Tarefas"}
+                        hasAddButton={true}
+                        showAddTodoList={
+                            () => {
+                                console.log('chamando adição!')
+                                this.refs.popupDialogComponent.showDialogComponentForAdd()
+                            }}/>
+    
+                    <FlatList
+                        style={styles.flatList}
+                        data={this.state.todoLists}
+                        
+                        renderItem={({ item, index }) => <FlatListItem {...item} itemIndex={index}
+                            id={item.id}
+                            name={item.name}                        
+                            descricao={item.descricao}
+                            datahora={item.datahora}
+                            onPressItem={() => {
+                                
+                               this.refs.popupDialogComponent.showDialogComponentForUpdate(item)
+                             }} >
+                            </FlatListItem>}
+                        keyExtractor={item => item.id}
+                    />
+                    <PopupDialogComponent ref={"popupDialogComponent"} />
+                        
+                </View>
             </View>
         );
     }

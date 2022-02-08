@@ -26,24 +26,26 @@ export default class PopupDialogComponent extends React.Component {
     }
     
     showDialogComponentForUpdate = (existingTodoList) => {
-        console.log('chegou aqui')
+        console.log('chegou aqui na edição')
         this.state.showPopup = true;
         this.setState({
-            dialogTitle: 'Atualizar a lista de tarefas',             
+            dialogTitle: 'Atualizar item da lista de tarefas',             
             id: existingTodoList.id,
             name: existingTodoList.name,
             descricao: existingTodoList.descricao,
             datahora: existingTodoList.datahora,
             isAddNew: false
         });
+        
     }
    
     showDialogComponentForAdd = () => {
         this.state.showPopup = true
         console.log('chegou aqui')
         this.setState({
-            dialogTitle: 'Adicionar uma nova tarefa',
+            dialogTitle: 'Adicionar uma nova tarefa na lista',
             name: "",
+            descricao: "",
             isAddNew: true,
         });
     }
@@ -53,7 +55,8 @@ export default class PopupDialogComponent extends React.Component {
         return (
             
             this.state.showPopup &&
-                <View style={styles.container}>
+            
+                <View style={styles.container} ref={"popupDialogComponent"}>
                         <Text style={styles.dialogText}>{dialogTitle}</Text>
                         <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                             <View style={styles.secondContainer}>
@@ -77,25 +80,40 @@ export default class PopupDialogComponent extends React.Component {
                         </View >
                         <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity style={styles.addButton} onPress={() => {
+                        
                         if (this.state.name.trim() == "") {
                             alert("Insira um nome para a tarefa!!!");
                             return;
-                        } else {
-                            let rightNow = new Date();
-                            const res = rightNow.toISOString().slice(0,10).replace(/-/g,"");
-                            const newTodoList = {
-                                id: Math.floor(Date.now() / 1000),
-                                name: this.state.name,
-                                creationDate: new Date(),
-                                datahora: res,
-                                descricao: this.state.descricao,
-                            };
-                            insertNewTodoList(newTodoList).then().catch((error) => {
-                                alert(`Erro de inserção: error ${error}`);
-                            });
-                            this.setState({showPopup: false}) 
-                        }
+                            } else {
+                                if (this.state.isAddNew == true) {
+                                    let rightNow = new Date();
+                                    const res = rightNow.toISOString().slice(0,10).replace(/-/g,"");
+                                    const newTodoList = {
+                                        id: Math.floor(Date.now() / 1000),
+                                        name: this.state.name,
+                                        creationDate: new Date(),
+                                        datahora: res,
+                                        descricao: this.state.descricao,
+                                    };
+                                    insertNewTodoList(newTodoList).then().catch((error) => {
+                                        alert(`Erro de inserção: error ${error}`);
+                                    });
+                                    this.setState({showPopup: false}) 
+                                    
+                                
+                                } else {
+                                    const todoList = {    
+                                        id:  this.state.id,
+                                        name: this.state.name,
+                                        descricao: this.state.descricao,                                        
+                                    };    
+                                    updateTodoList(todoList).then().catch((error) => {
+                                        alert(`Erro de edição: error ${error}`);
+                                    });
+                                    this.setState({showPopup: false})   
+                                }
                         
+                            } 
                         }}>
                         <Text style={styles.textLabel }>Inserir</Text>
                         </TouchableOpacity>
