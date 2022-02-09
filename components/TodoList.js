@@ -4,12 +4,12 @@ import {
     insertNewTodoList,
     updateTodoList, 
     deleteTodoList, 
-    queryAllTodoLists } from '../databases/allSchemas';
-import realm from '../databases/allSchemas'
+    queryAllTodoLists } from '../databases/schemas';
+import realm from '../databases/schemas'
 import { Platform } from 'react-native'
 import Swipeout from 'react-native-swipeout';
-import HeaderComponent from './HeaderComponent';
-import PopupDialogComponent from './PopupDialogComponent';
+import HeaderComponent from './Header';
+import PopupDialogComponent from './CrudView';
 import { Button } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 

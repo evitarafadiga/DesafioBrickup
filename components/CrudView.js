@@ -9,7 +9,7 @@ import {
     Image,
     TextInput,
 } from "react-native";
-import { insertNewTodoList, updateTodoList, queryAllTodoLists } from '../databases/allSchemas';
+import { insertNewTodoList, updateTodoList, queryAllTodoLists } from '../databases/schemas';
 import * as ImagePicker from "react-native-image-picker"
 
 export default class PopupDialogComponent extends React.Component {
