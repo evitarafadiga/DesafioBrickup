@@ -10,7 +10,7 @@ import {
     TextInput,
 } from "react-native";
 import { insertNewTodoList, updateTodoList, queryAllTodoLists } from '../databases/allSchemas';
-
+import * as ImagePicker from "react-native-image-picker"
 
 export default class PopupDialogComponent extends React.Component {
     
@@ -22,9 +22,54 @@ export default class PopupDialogComponent extends React.Component {
             descricao: '',
             isAddNew: true,
             showPopup: false,
+            resourcePath: {},
         };
     }
+
+    handleChoosePhoto = () => {
+
+        const options = {
+      
+            storageOptions: {
+      
+              skipBackup: true,
+      
+              path: 'images',
+      
+            },
+      
+        };
+
+        ImagePicker.launchImageLibrary(options, res => {
+
+        console.log('Response = ', res);
+
+         if (res.error) {
+
+          console.log('ImagePicker Error: ', res.error);
+
+        } else  {
+
+          const source = { uri: res.uri };
+
+          console.log('response', JSON.stringify(res));
+          
+            this.setState({
+          
+              filePath: res,
+          
+              fileData: res.data,
+          
+              fileUri: res.uri
+          
+          });
+
+        }
+
+        });
     
+      };
+            
     showDialogComponentForUpdate = (existingTodoList) => {
         console.log('chegou aqui na edição')
         this.state.showPopup = true;
@@ -34,6 +79,7 @@ export default class PopupDialogComponent extends React.Component {
             name: existingTodoList.name,
             descricao: existingTodoList.descricao,
             datahora: existingTodoList.datahora,
+            resourcePath: existingTodoList.resourcePath,
             isAddNew: false
         });
         
@@ -46,9 +92,11 @@ export default class PopupDialogComponent extends React.Component {
             dialogTitle: 'Adicionar uma nova tarefa na lista',
             name: "",
             descricao: "",
+            resourcePath: '',
             isAddNew: true,
         });
     }
+
     render() {
         
         const { dialogTitle } = this.state;
@@ -71,12 +119,19 @@ export default class PopupDialogComponent extends React.Component {
                         
                         
                         <TouchableOpacity style={styles.photoButton} onPress={() => {
-                            
+                            this.handleChoosePhoto()
                         }}>
                             
                             <Text style={styles.textLabel }>📷</Text>
                         </TouchableOpacity>
-                    
+                            <Image
+                                source={{ uri: this.state.resourcePath.fileUri }}
+                                style={{ width: 200, height: 200 }}
+                            />
+                            <Text style={{ alignItems: 'center' }}>
+                            ImagePath:{this.state.fileUri}
+
+                            </Text>
                         </View >
                         <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity style={styles.addButton} onPress={() => {
@@ -94,6 +149,7 @@ export default class PopupDialogComponent extends React.Component {
                                         creationDate: new Date(),
                                         datahora: res,
                                         descricao: this.state.descricao,
+                                        resourcePath: this.state.resourcePath ,
                                     };
                                     insertNewTodoList(newTodoList).then().catch((error) => {
                                         alert(`Erro de inserção: error ${error}`);
@@ -105,7 +161,8 @@ export default class PopupDialogComponent extends React.Component {
                                     const todoList = {    
                                         id:  this.state.id,
                                         name: this.state.name,
-                                        descricao: this.state.descricao,                                        
+                                        descricao: this.state.descricao,
+                                        resourcePath: this.state.resourcePath,                                       
                                     };    
                                     updateTodoList(todoList).then().catch((error) => {
                                         alert(`Erro de edição: error ${error}`);
@@ -113,8 +170,7 @@ export default class PopupDialogComponent extends React.Component {
                                     this.setState({showPopup: false})   
                                 }
                         
-                            } 
-                        }}>
+                            }}}>
                         <Text style={styles.textLabel }>Inserir</Text>
                         </TouchableOpacity>
 
@@ -141,7 +197,6 @@ const styles = StyleSheet.create({
         margin: 17,
         padding: 10,
         borderRadius: 17,
-        paddingBottom: 200,
         height: 800,
     },
     secondContainer: {
@@ -152,7 +207,7 @@ const styles = StyleSheet.create({
         borderRadius: 17,
         paddingTop: 5,
         paddingHorizontal: 20,
-        paddingBottom: 200,
+        paddingBottom: 100,
     },
     textInput: {
         height: 40,

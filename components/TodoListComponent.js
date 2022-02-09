@@ -24,12 +24,6 @@ let FlatListItem = props => {
     }
 
     const { itemIndex, id, name, creationDate, descricao, datahora, popupDialogComponent, onPressItem } = props;
-
-    showEditModal = () => {
-        popupDialogComponent.showDialogComponentForUpdate({
-            id, name, descricao, datahora, creationDate
-        });
-    }
     
     showDeleteConfirmation = () => {
         console.log(`excluindo item: ` + id)
@@ -128,6 +122,7 @@ export default class TodoListComponent extends React.Component {
                             name={item.name}                        
                             descricao={item.descricao}
                             datahora={item.datahora}
+                            resourepath={item.resourcePath}
                             onPressItem={() => {
                                 
                                this.refs.popupDialogComponent.showDialogComponentForUpdate(item)

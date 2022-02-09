@@ -21,6 +21,7 @@ export const TodoListSchema = {
         descricao: 'string',
         datahora: 'string',
         creationDate: 'date',
+        resourcePath: 'string',
         todos: { type: 'list', objectType: TODO_SCHEMA },
     }
 }
